@@ -14,12 +14,12 @@ public class FuncionarioService {
         return funcionarioDao.listAllColaboradores();
     }
 
-    public Funcionario findByCodigoColaborador(int codigoColaborador) {
-        return funcionarioDao.findByCodigoColaborador(codigoColaborador);
+    public Funcionario findByCodigoColaborador(int idFuncionario) {
+        return funcionarioDao.findByCodigoFuncionario(idFuncionario);
     }
 
     public Funcionario save(Funcionario funcionario) {
-        return funcionarioDao.cadastrarColaborador(funcionario);
+        return funcionarioDao.cadastrarFuncionario(funcionario);
     }
 
     public void delete(int idFuncionario) {
