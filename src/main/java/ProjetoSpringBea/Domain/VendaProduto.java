@@ -6,9 +6,10 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Produto {
+public class VendaProduto {
+    private int idVenda;
     private int idProduto;
-    private String nome;
+    private int idCliente;
+    private int idFuncionario;
     private int quantidade;
-    private double preco;
 }

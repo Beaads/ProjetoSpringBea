@@ -1,0 +1,141 @@
+package ProjetoSpringBea.Dao;
+
+import ProjetoSpringBea.Connection.ConnectionFactory;
+import ProjetoSpringBea.Domain.VendaProduto;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+public class VendaProdutoDAO {
+
+    public List<VendaProduto> listAllVendaProduto() {
+        List<VendaProduto> vendas = new ArrayList<>();
+        try (Connection connection = new ConnectionFactory().recuperarConexao()) {
+            PreparedStatement stm = connection.prepareStatement("SELECT numerodavenda, idProduto,"
+                    + " idCliente, idFuncionario, Quantidade FROM VENDAPRODUTO");
+            stm.executeQuery();
+            ResultSet rst = stm.getResultSet();
+            while (rst.next()) {
+                int numerodavenda = rst.getInt("numerodavenda");
+                int idProduto = rst.getInt("idProduto");
+                int idCliente = rst.getInt("idCliente");
+                int idFuncionario = rst.getInt("idFuncionario");
+                int Quantidade = rst.getInt("Quantidade");
+                VendaProduto vendaProduto = new VendaProduto(numerodavenda, idProduto, idCliente, idFuncionario, Quantidade);
+                vendas.add(vendaProduto);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return vendas;
+    }
+
+    public VendaProduto findByIdVenda(int idVenda) {
+        try (Connection connection = new ConnectionFactory().recuperarConexao()) {
+            PreparedStatement stm = connection.prepareStatement("SELECT idProduto,"
+                    + " idCliente, idFuncionario, Quantidade FROM VENDAPRODUTO WHERE numerodavenda = (?)");
+            stm.setInt(1, idVenda);
+            stm.executeQuery();
+            ResultSet rst = stm.getResultSet();
+            while (rst.next()) {
+                int idProduto = rst.getInt("idProduto");
+                int idCliente = rst.getInt("idCliente");
+                int idFuncionario = rst.getInt("idFuncionario");
+                int Quantidade = rst.getInt("Quantidade");
+                VendaProduto vendaProduto = new VendaProduto(idVenda, idProduto, idCliente, idFuncionario, Quantidade);
+                return vendaProduto;
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+    public VendaProduto cadastrarVenda(VendaProduto vendaProduto) {
+
+        try (Connection connection = new ConnectionFactory().recuperarConexao()) {
+            // Query pegando quantidade de produto e preço
+            PreparedStatement validProd = connection.prepareStatement("SELECT quantidade, preço FROM PRODUTO WHERE idProduto = ?");
+            validProd.setInt(1, vendaProduto.getIdProduto());
+            validProd.executeQuery();
+            ResultSet resultProduct = validProd.getResultSet();
+            int quantidadeProdutoAtual = 0;
+            int precoProduto = 0;
+            while(resultProduct.next()) {
+                quantidadeProdutoAtual = resultProduct.getInt("quantidade");
+                precoProduto = resultProduct.getInt("preço");
+            }
+
+
+            // Query pegando a idade e o montante de dinheiro do cliente
+            PreparedStatement validClient = connection.prepareStatement("SELECT idade, valorParaGastar FROM CLIENTE WHERE idCliente = ?");
+            validClient.setInt(1, vendaProduto.getIdCliente());
+            validClient.executeQuery();
+            ResultSet resultClient = validClient.getResultSet();
+            int valorClient = 0;
+            int idadeClient = 0;
+            while(resultClient.next()) {
+                idadeClient = resultClient.getInt("idade");
+                valorClient = resultClient.getInt("valorParaGastar");
+            }
+
+
+
+            // Query pegando setor do funcionário
+            PreparedStatement validEmployees = connection.prepareStatement("SELECT setor FROM funcionario WHERE idFuncionario = ?");
+            validEmployees.setInt(1, vendaProduto.getIdFuncionario());
+            validEmployees.executeQuery();
+            ResultSet resultEmployees = validEmployees.getResultSet();
+            String setorFuncionario = "";
+            while(resultEmployees.next()) {
+                setorFuncionario = resultEmployees.getString("setor");
+            }
+
+
+            int precoTotal = vendaProduto.getQuantidade() * precoProduto;
+
+
+
+            if(Objects.equals(setorFuncionario.toUpperCase(), "VENDAS") && quantidadeProdutoAtual >= vendaProduto.getQuantidade() && valorClient >= precoTotal && idadeClient >= 18) {
+                PreparedStatement stm = connection.prepareStatement("INSERT INTO VENDAPRODUTO (" +
+                        "IDPRODUTO, IDCLIENTE, IDFUNCIONARIO, QUANTIDADE) VALUES (?, ?, ?, ?) RETURNING numeroDaVenda");
+                stm.setInt(1, vendaProduto.getIdProduto());
+                stm.setInt(2, vendaProduto.getIdCliente());
+                stm.setInt(3, vendaProduto.getIdFuncionario());
+                stm.setInt(4, vendaProduto.getQuantidade());
+
+                PreparedStatement updateSaldoCliente = connection.prepareStatement("UPDATE CLIENTE SET valorParaGastar = ? WHERE idCliente = ?");
+                updateSaldoCliente.setInt(2, vendaProduto.getIdCliente());
+                updateSaldoCliente.setInt(1, ( valorClient - precoTotal));
+
+                PreparedStatement updateQuantidadeProdutos = connection.prepareStatement("UPDATE PRODUTO SET quantidade = ? WHERE idProduto = ?");
+                updateQuantidadeProdutos.setInt(1, (quantidadeProdutoAtual - vendaProduto.getQuantidade()));
+                updateQuantidadeProdutos.setInt(2, vendaProduto.getIdProduto());
+
+                stm.execute();
+                updateQuantidadeProdutos.execute();
+                updateSaldoCliente.execute();
+
+                ResultSet rst = stm.getResultSet();
+                int idVenda = 0;
+                while(rst.next()) {
+                    idVenda = rst.getInt("numeroDaVenda");
+                }
+
+                vendaProduto.setIdVenda(idVenda);
+                return vendaProduto;
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}

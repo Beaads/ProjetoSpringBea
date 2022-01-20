@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Cliente {
+        private int id;
         private String nome;
-        private String dataNascimento;
+        private int idade;
+        private double valorParaGastar;
 }
