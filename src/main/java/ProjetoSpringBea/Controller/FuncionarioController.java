@@ -1,5 +1,4 @@
 package ProjetoSpringBea.Controller;
-
 import ProjetoSpringBea.Domain.Funcionario;
 import ProjetoSpringBea.Service.FuncionarioService;
 import lombok.RequiredArgsConstructor;

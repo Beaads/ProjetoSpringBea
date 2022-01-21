@@ -57,10 +57,7 @@ public class VendaProdutoDAO {
         return null;
     }
 
-
-
     public VendaProduto cadastrarVenda(VendaProduto vendaProduto) {
-
         try (Connection connection = new ConnectionFactory().recuperarConexao()) {
             // Query pegando quantidade de produto e preço
             PreparedStatement validProd = connection.prepareStatement("SELECT quantidade, preço FROM PRODUTO WHERE idProduto = ?");
@@ -74,6 +71,7 @@ public class VendaProdutoDAO {
                 precoProduto = resultProduct.getInt("preço");
             }
 
+            int precoTotal = vendaProduto.getQuantidade() * precoProduto;
 
             // Query pegando a idade e o montante de dinheiro do cliente
             PreparedStatement validClient = connection.prepareStatement("SELECT idade, valorParaGastar FROM CLIENTE WHERE idCliente = ?");
@@ -87,8 +85,6 @@ public class VendaProdutoDAO {
                 valorClient = resultClient.getInt("valorParaGastar");
             }
 
-
-
             // Query pegando setor do funcionário
             PreparedStatement validEmployees = connection.prepareStatement("SELECT setor FROM funcionario WHERE idFuncionario = ?");
             validEmployees.setInt(1, vendaProduto.getIdFuncionario());
@@ -98,11 +94,6 @@ public class VendaProdutoDAO {
             while(resultEmployees.next()) {
                 setorFuncionario = resultEmployees.getString("setor");
             }
-
-
-            int precoTotal = vendaProduto.getQuantidade() * precoProduto;
-
-
 
             if(Objects.equals(setorFuncionario.toUpperCase(), "VENDAS") && quantidadeProdutoAtual >= vendaProduto.getQuantidade() && valorClient >= precoTotal && idadeClient >= 18) {
                 PreparedStatement stm = connection.prepareStatement("INSERT INTO VENDAPRODUTO (" +

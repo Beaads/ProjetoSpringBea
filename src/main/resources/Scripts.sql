@@ -1,0 +1,94 @@
+CREATE TABLE PRODUTO(
+	idProduto BIGSERIAL PRIMARY KEY not null,
+	nome VARCHAR(60),
+	quantidade int,
+	preco numeric
+);
+
+CREATE TABLE CLIENTE(
+	idCliente BIGSERIAL PRIMARY KEY not null,
+	idade int,
+	nome VARCHAR(60),
+	valorParaGastar numeric
+);
+
+CREATE TABLE funcionario
+(
+    idfuncionario bigserial NOT NULL PRIMARY KEY,
+    nome VARCHAR(255),
+    idade int,
+    setor VARCHAR(255)
+);
+
+CREATE TABLE VENDAPRODUTO (
+	numeroDaVenda BIGSERIAL PRIMARY KEY not null,
+	idProduto int not null,
+    idCliente int not null,
+    idfuncionario int not null,
+    quantidade int not null,
+		foreign key (idProduto) references produto(idproduto),
+		foreign key (idCliente) references cliente(idCliente),
+		foreign key (idfuncionario) references funcionario(idfuncionario)
+);
+
+INSERT INTO CLIENTE (nome, idade, valorParaGastar) VALUES(
+	'Maria','96','1000.00')
+	('Rafaela','20', '50.00'),
+('Amanda','18', '40.00'),
+('Julia','22', '80.00');
+
+INSERT INTO PRODUTO (nome, quantidade, preço) VALUES(
+'Caixa Pizza','10', '50.00'),
+('Caixa bolo','0', '90.00'),
+('Caixa correio','5', '70.00');
+
+SELECT * FROM PRODUTO;
+SELECT * FROM CLIENTE;
+SELECT * FROM FUNCIONARIO;
+SELECT * FROM VENDAPRODUTO;
+
+//Produto mais vendido
+SELECT SUM(VP.QUANTIDADE), P.IDPRODUTO, P.NOME, P.QUANTIDADE, P.PRECO
+FROM VENDAPRODUTO VP
+INNER JOIN PRODUTO P ON VP.IDPRODUTO = P.IDPRODUTO
+GROUP BY P.IDPRODUTO, P.NOME, P.QUANTIDADE, P.PRECO
+ORDER BY SUM(VP.QUANTIDADE) desc;
+
+//Funcionario que mais comprou
+SELECT SUM(VP.QUANTIDADE), F.NOME, F.SETOR, F.IDADE
+FROM VENDAPRODUTO VP
+INNER JOIN FUNCIONARIO F ON VP.IDFUNCIONARIO = F.IDFUNCIONARIO
+GROUP BY F.NOME, F.SETOR, F.IDADE
+ORDER BY SUM(VP.QUANTIDADE) desc;
+
+//Cliente que mais comprou
+SELECT SUM(VP.QUANTIDADE), C.NOME, C.IDADE
+FROM VENDAPRODUTO VP
+INNER JOIN CLIENTE C ON VP.IDCLIENTE = C.IDCLIENTE
+GROUP BY C.NOME, C.IDADE
+ORDER BY SUM(VP.QUANTIDADE) desc;
+
+//Vendas por funcionario
+SELECT PRODUTO.IDPRODUTO "ID",
+	PRODUTO.NOME "NOME",
+	VENDAPRODUTO.QUANTIDADE "QUANTIDADE",
+	FUNCIONARIO.NOME "NOME"
+	FROM PRODUTO INNER JOIN
+    VENDAPRODUTO ON PRODUTO.IDPRODUTO = VENDAPRODUTO.IDPRODUTO
+	INNER JOIN
+	FUNCIONARIO ON FUNCIONARIO.IDFUNCIONARIO = VENDAPRODUTO.IDFUNCIONARIO
+	WHERE FUNCIONARIO.NOME = 'Beatriz';
+
+//Busca por cliente
+SELECT CLIENTE.NOME,
+	PRODUTO.NOME,
+	VENDAPRODUTO.QUANTIDADE,
+	CLIENTE.VALORPARAGASTAR
+	FROM CLIENTE
+	INNER JOIN VENDAPRODUTO ON CLIENTE.IDCLIENTE = VENDAPRODUTO.IDCLIENTE
+	INNER JOIN PRODUTO ON PRODUTO.IDPRODUTO = VENDAPRODUTO.IDPRODUTO
+	WHERE CLIENTE.NOME = 'Maria';
+
+
+
+
