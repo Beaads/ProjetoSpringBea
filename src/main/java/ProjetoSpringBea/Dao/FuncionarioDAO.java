@@ -2,6 +2,7 @@ package ProjetoSpringBea.Dao;
 
 import ProjetoSpringBea.Connection.ConnectionFactory;
 import ProjetoSpringBea.Domain.Funcionario;
+import ProjetoSpringBea.Domain.FuncionarioQueMaisVendeu;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -95,6 +96,28 @@ public class FuncionarioDAO {
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<FuncionarioQueMaisVendeu> listaQuemVendeuMais() {
+        List<FuncionarioQueMaisVendeu> funcionarios = new ArrayList<>();
+        try (Connection connection = new ConnectionFactory().recuperarConexao()) {
+            PreparedStatement stm = connection.prepareStatement("SELECT SUM(VP.QUANTIDADE) AS QUANTIDADE, F.NOME " +
+                    "FROM VENDAPRODUTO VP " +
+                    "INNER JOIN FUNCIONARIO F ON VP.IDFUNCIONARIO = F.IDFUNCIONARIO " +
+                    "GROUP BY F.NOME, F.SETOR, F.IDADE " +
+                    "ORDER BY SUM(VP.QUANTIDADE) desc");
+            stm.executeQuery();
+            ResultSet rst = stm.getResultSet();
+            while (rst.next()) {
+                int quantidade = rst.getInt("quantidade");
+                String nomeFuncionario = rst.getString("nome");
+                FuncionarioQueMaisVendeu funcionarioQueMaisVendeu = new FuncionarioQueMaisVendeu(quantidade, nomeFuncionario);
+                funcionarios.add(funcionarioQueMaisVendeu);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return funcionarios;
     }
 }
 

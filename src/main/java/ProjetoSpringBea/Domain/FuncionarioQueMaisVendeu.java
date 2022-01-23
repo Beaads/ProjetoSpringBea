@@ -1,15 +1,12 @@
 package ProjetoSpringBea.Domain;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Produto {
-    private int idProduto;
-    private String nome;
+public class FuncionarioQueMaisVendeu {
     private int quantidade;
-    private double preco;
-
+    private String nomeFuncionario;
 }
+

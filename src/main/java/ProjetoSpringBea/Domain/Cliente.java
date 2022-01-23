@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class Cliente {
         private int id;
-        private String nome;
         private int idade;
+        private String nome;
         private double valorParaGastar;
 }

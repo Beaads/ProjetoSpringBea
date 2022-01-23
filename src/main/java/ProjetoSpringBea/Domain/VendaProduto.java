@@ -12,4 +12,8 @@ public class VendaProduto {
     private int idCliente;
     private int idFuncionario;
     private int quantidade;
+
+    public VendaProduto(int quantidade) {
+        this.quantidade = quantidade;
+    }
 }

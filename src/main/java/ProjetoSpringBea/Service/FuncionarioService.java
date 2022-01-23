@@ -2,6 +2,7 @@ package ProjetoSpringBea.Service;
 
 import ProjetoSpringBea.Dao.FuncionarioDAO;
 import ProjetoSpringBea.Domain.Funcionario;
+import ProjetoSpringBea.Domain.FuncionarioQueMaisVendeu;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,5 +29,9 @@ public class FuncionarioService {
 
     public void replace(Funcionario funcionario, int idFuncionario) {
         funcionarioDao.updateById(funcionario, idFuncionario);
+    }
+
+    public List<FuncionarioQueMaisVendeu> listaQuemVendeuMais() {
+        return funcionarioDao.listaQuemVendeuMais();
     }
 }

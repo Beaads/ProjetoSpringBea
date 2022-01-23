@@ -1,5 +1,6 @@
 package ProjetoSpringBea.Controller;
 import ProjetoSpringBea.Domain.Funcionario;
+import ProjetoSpringBea.Domain.FuncionarioQueMaisVendeu;
 import ProjetoSpringBea.Service.FuncionarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,5 +44,10 @@ public class FuncionarioController {
     public ResponseEntity<Void> replace (@RequestBody Funcionario funcionario, @PathVariable int idFuncionario) {
         funcionarioService.replace(funcionario, idFuncionario);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping(path = "/quemVendeumais")
+    public ResponseEntity<List<FuncionarioQueMaisVendeu>> lista() {
+        return new ResponseEntity<>(funcionarioService.listaQuemVendeuMais(), HttpStatus.OK);
     }
 }
