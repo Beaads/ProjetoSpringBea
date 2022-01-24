@@ -55,15 +55,17 @@ public class ClienteDAO {
         return null;
     }
 
-    public Cliente updateValorParaGastar(int idCliente) {
+    public void updateValorParaGastar(int idCliente, double valorPraGastar, double precoProduto, double quantidade) {
         try(Connection connection = new ConnectionFactory().recuperarConexao()) {
             PreparedStatement updateSaldoCliente = connection.prepareStatement("UPDATE CLIENTE SET valorParaGastar = ? WHERE idCliente = ?");
-            updateSaldoCliente.setInt(1, ( valorClient - precoTotal));
+            updateSaldoCliente.setDouble(1, valorPraGastar - precoProduto * quantidade);
             updateSaldoCliente.setInt(2, idCliente);
-
             updateSaldoCliente.execute();
-
-    } catch (SQLException | ClassNotFoundException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
         }
+
     }
+
+
+}

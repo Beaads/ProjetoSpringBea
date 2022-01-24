@@ -16,10 +16,10 @@ import java.util.List;
 
 public class ClienteController {
 
-    private final ClienteService clienteQueMaisComprouDAOService;
+    private final ClienteService clienteQueMaisComprouService;
 
     @GetMapping
     public ResponseEntity<List<ClienteQueMaisComprou>> list() {
-        return new ResponseEntity<>(clienteQueMaisComprouDAOService.listaCliente(), HttpStatus.OK);
+        return new ResponseEntity<>(clienteQueMaisComprouService.listaCliente(), HttpStatus.OK);
     }
 }

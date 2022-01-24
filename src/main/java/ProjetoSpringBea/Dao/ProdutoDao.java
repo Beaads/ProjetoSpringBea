@@ -2,7 +2,6 @@ package ProjetoSpringBea.Dao;
 
 import ProjetoSpringBea.Connection.ConnectionFactory;
 import ProjetoSpringBea.Domain.Produto;
-import ProjetoSpringBea.Domain.VendaProduto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -31,15 +30,14 @@ public class ProdutoDao {
         return null;
     }
 
-    public Produto updateQuantidade(int idProduto) {
+    public void updateQuantidadeProduto(Produto produto, int quantidade) {
         try (Connection connection = new ConnectionFactory().recuperarConexao()) {
             PreparedStatement updateQuantidadeProdutos = connection.prepareStatement("UPDATE PRODUTO SET quantidade = ? WHERE idProduto = ?");
-            updateQuantidadeProdutos.setInt(1, (quantidadeProdutoAtual - vendaProduto.getQuantidade()));
-            updateQuantidadeProdutos.setInt(2, vendaProduto.getIdProduto());
-
+            updateQuantidadeProdutos.setInt(1, (produto.getQuantidade() - quantidade));
+            updateQuantidadeProdutos.setInt(2, produto.getIdProduto());
             updateQuantidadeProdutos.execute();
-
     } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
         }
     }
+}

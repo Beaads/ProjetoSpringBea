@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class VendaProdutoDAO {
 
@@ -65,7 +64,7 @@ public class VendaProdutoDAO {
                 stm.setInt(2, vendaProduto.getIdCliente());
                 stm.setInt(3, vendaProduto.getIdFuncionario());
                 stm.setInt(4, vendaProduto.getQuantidade());
-
+                stm.execute();
                 ResultSet rst = stm.getResultSet();
                 int idVenda = 0;
                 while(rst.next()) {
