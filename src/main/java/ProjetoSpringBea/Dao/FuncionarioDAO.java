@@ -3,6 +3,8 @@ package ProjetoSpringBea.Dao;
 import ProjetoSpringBea.Connection.ConnectionFactory;
 import ProjetoSpringBea.Domain.Funcionario;
 import ProjetoSpringBea.Domain.FuncionarioQueMaisVendeu;
+import ProjetoSpringBea.Domain.VendaProduto;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -84,6 +86,7 @@ public class FuncionarioDAO {
             e.printStackTrace();
         }
     }
+
     public void updateById(Funcionario funcionario, int idFuncionario) {
         try (Connection connection = new ConnectionFactory().recuperarConexao()) {
             PreparedStatement stm = connection.prepareStatement("UPDATE FUNCIONARIO SET NOME = ?, IDADE = ?, SETOR = ?" +
@@ -118,6 +121,23 @@ public class FuncionarioDAO {
             e.printStackTrace();
         }
         return funcionarios;
+    }
+
+    public String getSetorById(int idFuncionario) {
+        try (Connection connection = new ConnectionFactory().recuperarConexao()) {
+            PreparedStatement validEmployees = connection.prepareStatement("SELECT setor FROM funcionario WHERE idFuncionario = ?");
+            validEmployees.setInt(1, idFuncionario);
+            validEmployees.executeQuery();
+            ResultSet resultEmployees = validEmployees.getResultSet();
+            String setorFuncionario = "";
+            while (resultEmployees.next()) {
+                setorFuncionario = resultEmployees.getString("setor");
+            }
+            return setorFuncionario;
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
     }
 }
 

@@ -34,4 +34,8 @@ public class FuncionarioService {
     public List<FuncionarioQueMaisVendeu> listaQuemVendeuMais() {
         return funcionarioDao.listaQuemVendeuMais();
     }
+
+    public String getSetorById(int idFuncionario) {
+        return funcionarioDao.getSetorById(idFuncionario);
+    }
 }

@@ -1,8 +1,7 @@
 package ProjetoSpringBea.Controller;
 
-import ProjetoSpringBea.Domain.Cliente;
 import ProjetoSpringBea.Domain.ClienteQueMaisComprou;
-import ProjetoSpringBea.Service.ClienteQueMaisComprouService;
+import ProjetoSpringBea.Service.ClienteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +14,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 
-public class clienteQueMaisComprouController {
+public class ClienteController {
 
-    private final ClienteQueMaisComprouService clienteQueMaisComprouDAOService;
+    private final ClienteService clienteQueMaisComprouDAOService;
 
     @GetMapping
     public ResponseEntity<List<ClienteQueMaisComprou>> list() {
