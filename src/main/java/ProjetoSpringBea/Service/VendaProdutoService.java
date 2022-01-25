@@ -19,8 +19,6 @@ public class VendaProdutoService {
     private VendaProdutoDAO vendaProdutoDAO = new VendaProdutoDAO();
     private ProdutoService produtoService = new ProdutoService();
     private ClienteService clienteService = new ClienteService();
-    private ClienteDAO clienteDAO = new ClienteDAO();
-    private ProdutoDao produtoDao = new ProdutoDao();
 
     public List<VendaProduto> listAllVendaProduto() {
         return vendaProdutoDAO.listAllVendaProduto();
@@ -38,8 +36,8 @@ public class VendaProdutoService {
                 && produto.getQuantidade()   >= vendaProduto.getQuantidade()
                 && cliente.getValorParaGastar() >= produto.getPreco() * vendaProduto.getQuantidade()
                 && cliente.getIdade() >= 18) {
-            clienteDAO.updateValorParaGastar(cliente.getId(), cliente.getValorParaGastar(), produto.getPreco(), vendaProduto.getQuantidade());
-            produtoDao.updateQuantidadeProduto(produto, vendaProduto.getQuantidade());
+            clienteService.updateValorParaGastar(cliente.getId(), cliente.getValorParaGastar(), produto.getPreco(), vendaProduto.getQuantidade());
+            produtoService.updateQuantidadeProduto(produto, vendaProduto.getQuantidade());
             return vendaProdutoDAO.cadastrarVenda(vendaProduto);
         }
         return null;

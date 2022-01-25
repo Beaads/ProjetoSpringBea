@@ -12,7 +12,7 @@ public class ProdutoDao {
 
     public Produto getProdutoById(int idProduto) {
         try (Connection connection = new ConnectionFactory().recuperarConexao()) {
-            PreparedStatement validProd = connection.prepareStatement("SELECT idProduto, nome, quantidade, preço FROM PRODUTO WHERE idProduto = ?");
+            PreparedStatement validProd = connection.prepareStatement("SELECT idProduto, nome, quantidade, preco FROM PRODUTO WHERE idProduto = ?");
             validProd.setInt(1, idProduto);
             validProd.executeQuery();
             ResultSet resultProduct = validProd.getResultSet();
@@ -20,7 +20,7 @@ public class ProdutoDao {
                 Produto produto = new Produto(idProduto,
                         resultProduct.getString("nome"),
                         resultProduct.getInt("quantidade"),
-                        resultProduct.getInt("preço"));
+                        resultProduct.getInt("preco"));
                 return produto;
             }
 

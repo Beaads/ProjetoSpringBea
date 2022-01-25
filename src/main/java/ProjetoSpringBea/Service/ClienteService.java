@@ -19,4 +19,8 @@ public class ClienteService {
     public Cliente getClienteById(int idCliente) {
         return clienteDAO.getClienteById(idCliente);
     }
+
+    public void updateValorParaGastar(int idCliente, double valorPraGastar, double precoProduto, double quantidade) {
+        clienteDAO.updateValorParaGastar(idCliente, valorPraGastar, precoProduto, quantidade);
+    }
 }

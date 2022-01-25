@@ -9,4 +9,8 @@ public class ProdutoService {
     public Produto getProdutoById(int idProduto) {
         return produtoDao.getProdutoById(idProduto);
     }
+
+    public void updateQuantidadeProduto(Produto produto, int quantidade) {
+        produtoDao.updateQuantidadeProduto(produto, quantidade);
+}
 }
