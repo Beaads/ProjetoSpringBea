@@ -31,16 +31,19 @@ CREATE TABLE VENDAPRODUTO (
 		foreign key (idfuncionario) references funcionario(idfuncionario)
 );
 
-INSERT INTO CLIENTE (nome, idade, valorParaGastar) VALUES(
-	'Maria','96','1000.00')
+INSERT INTO CLIENTE (nome, idade, valorParaGastar) VALUES
+    ('Maria','96','1000.00'),
 	('Rafaela','20', '50.00'),
-('Amanda','18', '40.00'),
-('Julia','22', '80.00');
+    ('Amanda','18', '40.00'),
+    ('Julia','22', '80.00');
 
-INSERT INTO PRODUTO (nome, quantidade, preço) VALUES(
+INSERT INTO PRODUTO (nome, quantidade, preco) VALUES(
 'Caixa Pizza','10', '50.00'),
 ('Caixa bolo','0', '90.00'),
 ('Caixa correio','5', '70.00');
+
+
+
 
 SELECT * FROM PRODUTO;
 SELECT * FROM CLIENTE;
