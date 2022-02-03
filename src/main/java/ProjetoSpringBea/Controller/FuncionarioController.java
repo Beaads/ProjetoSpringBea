@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequestMapping ("funcionarios")
 @RestController
@@ -36,8 +37,13 @@ public class FuncionarioController {
 
     @DeleteMapping(path = "/{idFuncionario}")
     public ResponseEntity<Void> delete (@PathVariable int idFuncionario) {
-        funcionarioService.delete(idFuncionario);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        Optional<Funcionario> data = Optional.ofNullable(funcionarioService.findByCodigoColaborador(idFuncionario));
+        FuncionarioService response = new FuncionarioService();
+        if (data.isPresent()) {
+            funcionarioService.delete(idFuncionario);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<> (HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(path = "/{idFuncionario}")
